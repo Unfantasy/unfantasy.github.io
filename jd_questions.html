@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="shotcut icon" href="images/favicon.ico"/>
+    <title>贝壳</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/index.css"/>
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/function.js"></script>
+    <script src="js/mh_mobile.js"></script>
+    <script src="js/index.js"></script>
+    <style>
+        #cas{
+            position: fixed;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+<canvas id="cas"></canvas>
+<script>
+    var canvas=document.getElementById("cas"),
+            ctx=canvas.getContext("2d");
+
+    function resize(){
+        canvas.width=window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth||1000;
+        canvas.height=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight||600;
+        console.log("canvasWidth:"+canvas.width,"canvasHeight:"+canvas.height);
+    }
+
+    resize();
+    window.onresize=resize;
+
+    var RAF=(function(){
+        return window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.setTimeout(callback,1000/60);
+    })();
+
+    var warea={x:null,y:null,max:20000};
+
+    window.onmousemove=function(e){
+        e=e||event;
+
+        warea.x=e.clientX;
+        warea.y=e.clientY;
+    };
+    window.onmouseout=function(e){
+        e=e||event;
+
+        warea.x=null;
+        warea.y=null;
+    }
+
+    var dots=[];
+    for(var i=0;i<300;i++){
+        var x=Math.random()*canvas.width,
+                y=Math.random()*canvas.height;
+        var xa=Math.random()*2-1,
+                ya=Math.random()*2-1;
+        dots.push({"x":x,"y":y,"xa":xa,"ya":ya,"max":6000});
+    }
+
+    setTimeout(function(){animate();},100);
+    function animate(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        var ndots=[warea].concat(dots);
+
+        dots.forEach(function(dot){
+            dot.x+=dot.xa;
+            dot.y+=dot.ya;
+
+            dot.xa*=(dot.x>canvas.width||dot.x<0)?-1:1;
+            dot.ya*=(dot.y>canvas.height||dot.y<0)?-1:1;
+
+            ctx.fillRect(dot.x-.5,dot.y-.5,1,1);
+
+            for(var i=0;i<ndots.length;i++){
+                var d2=ndots[i];
+
+                if(dot===d2||d2.x===null||d2.y===null) continue;
+
+                var xc=dot.x-d2.x,
+                        yc=dot.y-d2.y;
+
+                var dis=xc*xc+yc*yc;
+
+                var ratio;
+
+                if(dis<d2.max){
+                    if(d2===warea&&dis>(d2.max/2)){
+                        dot.x-=xc*0.03;
+                        dot.y-=yc*0.03;
+                    }
+                    ratio=(d2.max-dis)/d2.max;
+
+                    ctx.beginPath();
+                    ctx.lineWidth=ratio/2;
+                    ctx.strokeStyle="rgba(0,0,0,"+(ratio+.2)+")";
+                    ctx.moveTo(dot.x,dot.y);
+                    ctx.lineTo(d2.x,d2.y);
+                    ctx.stroke();
+
+                }
+            }
+
+            ndots.splice(ndots.indexOf(dot),1);
+        });
+
+        RAF(animate);
+    }
+</script>
+<nav>
+    <!--<audio src="music/陈奕迅%20-%20浮夸.mp3" autoplay loop preload="metadata"></audio>-->
+    <div class="container-fluid content">
+        <div class="navbar-header">
+            <div class="navbar-brand">
+                <img src="" alt=""/>
+            </div>
+            <div class="pull-right">
+                <button class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="glyphicon glyphicon-menu-hamburger"></span>
+                </button>
+            </div>
+        </div>
+        <div class="navbar-collapse collapse pull-right" id="navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="jd.html">自嘲</a></li>
+                <li><a href="#">往事</a></li>
+                <li class="active">
+                    <a href="#">贝壳</a>
+                </li>
+                <li>
+                    <a href="jd_extract.html">摘录</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<article>
+    <div class="content_box content">
+        <h2>CSS</h2>
+        <div class="qw_content">
+            <div class="question">
+                <h4>css优先级</h4>
+            </div>
+            <div class="answer">
+                <p><a href="http://www.cnblogs.com/xugang/archive/2010/09/24/1833760.html" target="_blank">CSS 的优先级机制</a></p>
+                <ol>
+                    <li>选择器都有一个权值，权值越大越优先；</li>
+                    <li>当权值相等时，后出现的样式表设置要优于先出现的样式表设置；</li>
+                    <li>创作者的规则高于浏览者：即网页编写者设置的CSS 样式的优先权高于浏览器所设置的样式；</li>
+                    <li> 继承的CSS 样式不如后来指定的CSS 样式；</li>
+                    <li>在同一组属性设置中标有“!important”规则的优先级最大；</li>
+                </ol>
+            </div>
+        </div>
+        <div class="qw_content">
+            <div class="question">
+                <h4>1，移动端高清、多屏适配方案</h4>
+            </div>
+            <div class="answer">
+                <p>最新解决办法</p>
+                <pre><code>
+(function(doc, win) {
+var docEl = doc.documentElement,
+resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+recalc = function() {
+var clientWidth = docEl.clientWidth;
+if (!clientWidth) return;
+docEl.style.fontSize = 20 * (clientWidth / 300) + 'px';
+};
+
+if (!doc.addEventListener) return;
+win.addEventListener(resizeEvt, recalc, false);
+doc.addEventListener('DOMContentLoaded', recalc, false);
+})(document, window);
+                </code></pre>
+               <p>参考 <a href="http://div.io/topic/1092?page=1#4713" target="_blank">移动端高清、多屏适配方案</a>。解决代码如下：</p>
+                <pre><code>
+var dpr, rem, scale;
+var docEl = document.documentElement;
+var fontEl = document.createElement('style');
+var metaEl = document.querySelector('meta[name="viewport"]');
+
+dpr = window.devicePixelRatio || 1;
+rem = docEl.clientWidth * dpr / 10;
+scale = 1 / dpr;
+
+
+// 设置viewport，进行缩放，达到高清效果
+metaEl.setAttribute('content', 'width=' + dpr * docEl.clientWidth + ',initial-scale=' + scale + ',maximum-scale=' + scale + ', minimum-scale=' + scale + ',user-scalable=no');
+
+// 设置data-dpr属性，留作的css hack之用
+docEl.setAttribute('data-dpr', dpr);
+
+// 动态写入样式
+docEl.firstElementChild.appendChild(fontEl);
+fontEl.innerHTML = 'html{font-size:' + rem + 'px!important;}';
+
+// 给js调用的，某一dpr下rem和px之间的转换函数
+window.rem2px = function(v) {
+v = parseFloat(v);
+return v * rem;
+};
+window.px2rem = function(v) {
+v = parseFloat(v);
+return v / rem;
+};
+
+window.dpr = dpr;
+window.rem = rem;</code></pre>
+                <p>此方案可以精确地算出不同屏幕所应有的rem基准值，缺点就是要加载这么一段js代码，解决了3个方案</p>
+                <ol>
+                    <li>border: 1px问题</li>
+                    <li>图片高清问题</li>
+                    <li>屏幕适配布局问题</li>
+                </ol>
+            </div>
+        </div>
+        <div class="qw_content">
+            <div class="question">
+                <h4>2，元素水平，垂直居中方案</h4>
+            </div>
+            <div class="answer">
+                <p>参考 <a href="https://www.qianduan.net/css-to-achieve-the-vertical-center-of-the-five-kinds-of-methods/" target="_blank">CSS实现垂直居中的5种方法</a></p>
+                <p><span class="bold">方案一：</span>绝对定位 + transform</p>
+                <pre><code>
+.inner{
+    position : absolute;
+    top: 50%;
+    left:50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}</code></pre>
+                <p><span class="bold">方案二：</span>table定位</p>
+                <pre><code>
+#wrapper {
+    display: table;
+}
+
+#cell {
+    display: table-cell;
+    vertical-align: middle;
+}</code></pre>
+                <p class="lt">此方案要设置父元素为table定位</p>
+                <p><span class="bold">方案三：</span>绝对定位+margin</p>
+                <pre><code>
+#content {
+    position: absolute;
+    top: 50%;
+    left:50%;
+    width: 240px;
+    margin-left: -120px;/* negative half of the width */
+    height: 240px;
+    margin-top: -120px; /* negative half of the height */
+}</code></pre>
+                <p class="lt">适用于固定大小的元素</p>
+                <p><span class="bold">方案四：</span></p>
+                <pre><code>
+#content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 240px;
+    width: 70%;
+}</code></pre>
+                <p class="lt"><span class="mark">摘</span>：这个方法使用了一个 position:absolute，有固定宽度和高度的 div。这个 div 被设置为 top:0; bottom:0;。但是因为它有固定高度，其实并不能和上下都间距为 0，因此 margin:auto; 会使它居中。使用 margin:auto;使块级元素垂直居中是很简单的。</p>
+                <p><span class="bold">方案五：</span> line-height</p>
+                <pre><code>
+#content {
+    height: 100px;
+    line-height: 100px;
+}</code></pre>
+                <p class="lt">这个方法只能将单行文本置中。要注意如果换行就会很尴尬了。</p>
+                <p><span class="bold">方案六：</span> display:inline-block</p>
+                <pre><code>
+                    .boxMiddle {
+                    height: 120px;
+                    }
+                    i,.content{
+                    display: inline-block;
+                    vertical-align: middle;
+                    }
+                    i {
+                    width: 0;
+                    height: 120px;
+                    }</code></pre>
+                <p class="lt">需要设置父层高度，i,.content为子元素</p>
+                <p><span class="bold">方案七：</span>浮动元素居中方法</p>
+                <pre><code>
+#wrapper {
+    float: left;
+    position: relative;
+    text-align: left;
+    left: 50%;
+}
+#wrapper ul {
+    list-style: none;
+    position: relative;
+    left: -50%;
+}
+#wrapper ul li {
+    float: left;
+    position: relative; /* For IE6 */
+}</code></pre>
+                <p class="lt">CSS居中一个float浮动元素的核心：
+                    让最外面的层相对定位，left等于50%，然后内部嵌套层也使用相对定位且left设为-50%，这样的效果就是内层相对整行为水平居中</p>
+            </div>
+        </div>
+        <div class="qw_content">
+            <div class="question">
+                <h4>3，input相关</h4>
+            </div>
+            <div class="answer">
+                <p>placeholder样式改变</p>
+                <pre><code>
+::-webkit-input-placeholder { /* WebKit browsers */
+    color: #f00;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #f00;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #f00;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #f00;
+}</code></pre>
+                <p>手机端长按 样式改变</p>
+                <pre><code>
+input {
+    -webkit-tap-highlight-color: rgba(255, 0, 0, 0);
+}</code></pre>
+            </div>
+        </div>
+        <div class="qw_content">
+            <div class="question">
+                <h4>4，linear-gradient（线性渐变）使用注意</h4>
+            </div>
+            <div class="answer">
+                <p><a href="http://digcss.com/css3-linear-gradient-direction-angle-problem/" target="_blank">参考此处</a></p>
+                <pre><code>
+section{
+    background-image: -ms-linear-gradient(bottom left,#5c43ab 0,#8f43ab 50%,#ab4388 100%); <mark>/*加前缀，方向不能加to*/</mark>
+    background-image: -o-linear-gradient(bottom left,#5c43ab 0,#8f43ab 50%,#ab4388 100%);
+    background-image: -webkit-linear-gradient(bottom left,#5c43ab 0,#8f43ab 50%,#ab4388 100%);
+    background-image: -moz-linear-gradient(bottom left,#5c43ab 0,#8f43ab 50%,#ab4388 100%);
+    background-image: linear-gradient(to top right,#5c43ab 0,#8f43ab 50%,#ab4388 100%); <mark>/*不加前缀，方向必须加to*/</mark>
+}
+                </code></pre>
+            </div>
+        </div>
+        <div class="qw_content">
+            <div class="question">
+                <h4>5，弹性布局（flex）兼容性写法</h4>
+            </div>
+            <div class="answer">
+                <pre><code>
+.flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}</code></pre>
+            </div>
+        </div>
+        <div class="qw_content">
+            <div class="question">
+                <h4>6，display:inline-block 空白节点占据宽度解决办法</h4>
+            </div>
+            <div class="answer">
+                <p><a href="http://www.w3cplus.com/css/fighting-the-space-between-inline-block-elements" target="_blank">如何解决inline-block元素的空白间距</a></p>
+                <p>父元素定义font-size:0。</p>
+            </div>
+        </div>
+        <div class="qw_content">
+            <div class="question">
+                <h4>7，手机端禁止选中文本和图片</h4>
+            </div>
+            <div class="answer">
+                <pre><code>
+* {
+-webkit-touch-callout:none;
+-webkit-user-select:none;
+-khtml-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
+user-select:none;
+}
+img { pointer-events: none; }</code></pre>
+
+            </div>
+        </div>
+        <div class="qw_content">
+            <div class="question">
+                <h4> iphone 手机浏览器 按钮样式 的默认样式更改</h4>
+            </div>
+            <div class="answer">
+                <p><a href="http://stackoverflow.com/questions/5449412/styling-input-buttons-for-ipad-and-iphone">http://stackoverflow.com/questions/5449412/styling-input-buttons-for-ipad-and-iphone</a></p>
+                <pre><code>-webkit-appearance: none;</code></pre>
+            </div>
+        </div>
+        <h2>JS</h2>
+        <div class="qw_content">
+            <div class="question">
+                <h4>1，获取父窗口元素</h4>
+            </div>
+            <div class="answer">
+                <p>jquery获取父窗口ID为：$("#父窗口元素ID",window.parent.document);</p>
+
+                <p>javascript获取父窗口ID为：window.parent.document.getElementByIdx_xx_x("父窗口元素ID")；</p>
+
+                <p>取父窗口的元素方法：$(selector, window.parent.document);</p>
+
+                <p>那么你取父窗口的父窗口的元素就可以用：$(selector, window.parent.parent.document);</p>
+            </div>
+        </div>
+        <div class="qw_content">
+            <div class="question">
+                <h4>2，关于闭包</h4>
+            </div>
+            <div class="answer">
+                <p>待补充</p>
+            </div>
+        </div>
+
+        <div class="qw_content">
+            <div class="question">
+                <h4>3，通过浏览器网址获取参数</h4>
+            </div>
+            <div class="answer">
+                <p>如下</p>
+                <pre><code>
+var src = window.location.search; //获取url中"?"符后的字串
+var theRequest = new Object();
+if (src.indexOf("?") != -1) {
+    var str = src.substr(1);
+    strs = str.split("&");
+    for (var i = 0; i < strs.length; i++) {
+        theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+    }
+}
+                </code></pre>
+            </div>
+        </div>
+        <div class="qw_content">
+            <div class="question">
+                <h4>4，获取file路径</h4>
+            </div>
+            <div class="answer">
+                <p>待补充</p>
+            </div>
+        </div>
+        <div class="qw_content">
+            <div class="question">
+                <h4>5，prop与attr区别</h4>
+            </div>
+            <div class="answer">
+                <p>对于HTML元素本身就带有的固有属性，在处理时，使用prop方法。 </p>
+                <p>对于HTML元素我们自己自定义的DOM属性，在处理时，使用attr方法。</p>
+            </div>
+        </div>
+        <div class="qw_content">
+            <div class="question">
+                <h4>6，jqueryui</h4>
+            </div>
+            <div class="answer">
+                <p>参考<a href="http://www.runoob.com/jqueryui/jqueryui-tutorial.html">jQuery UI 教程 | 菜鸟教程</a></p>
+            </div>
+        </div>
+        <div class="qw_content">
+            <div class="question">
+                <h4>7，在条件判断里面 直接写 “value” 和“value==true”的区别</h4>
+            </div>
+            <div class="answer">
+                <p> 直接写value 当value 为"",null , undefined 的时候为false，“data==true”时，当data 为[],{},"",null,undefined时为false。 </p>
+                <p>因为 [] , {} 虽然为空但仍然是对象，如果没有在“==”中是不会转换为false的。</p>
+            </div>
+        </div>
+        <div class="qw_content">
+            <div class="question">
+                <h4>8，jq height(),innerHeight(),outerHeight()区别</h4>
+            </div>
+            <div class="answer">
+                <p>标准浏览器下</p>
+                <p>（1）height:高度 （2）innerHeight:高度＋补白  （3）outerHeight:高度＋补白＋边框，参数为true时：高度＋补白＋边框＋边距 </p>
+            </div>
+        </div>
+        <div class="qw_content">
+            <div class="question">
+                <h4>9，表达式的副作用</h4>
+            </div>
+            <div class="answer">
+                <p>参见 <a href="https://segmentfault.com/q/1010000003802072">js中表达式的的副作用是什么</a><br/><a href="https://msdn.microsoft.com/ZH-cn/LIBRARY/a7a250bs(v=vs.90).ASPX">副作用与表达式</a></p>
+                <p>如果计算表达式会更改应用程序中数据的值，则发生副作用</p>
+                <p>没有副作用是说，除了变量定义的时候给出的初始值之外，其他表达式不会改变任何变量的值/程序运行的状态。一个函数/表达式的结果仅仅体现在其输入参数和返回值上，输入的参数相同，则返回值相同。除了用函数得到这个返回值之外，函数不会再有其他任何的作用。</p>
+            </div>
+        </div>
+        <h2>其他</h2>
+        <div class="qw_content">
+            <div class="question">
+                <h4>1，git常用命令</h4>
+            </div>
+            <div class="answer">
+                <ul>
+                    <li>git status :查看状态</li>
+                    <li>git add --all :添加</li>
+                    <li>git commit -s  --> i --> commit name -->esc --> :wq enter    /git commit -m "commit name" :提交</li>
+                    <li>git push origin master :推送到服务器master 分支</li>
+                    <li>git config --global credential.helper store  ：解决git 每次push 都要输入密码；</li>
+                    <li>git log -->查看日志</li>
+                </ul>
+                <p>以上为我自己用过的git命令，更详细的请参考<a href="http://www.ruanyifeng.com/blog/2015/12/git-cheat-sheet.html">常用Git 命令清单- 阮一峰的网络日志</a></p>
+            </div>
+        </div>
+    </div>
+
+</article>
+<footer>
+    <p>有志者，事竟成 浙ICP备14016681号 <a href="jd_introduce.html">关于我</a></p>
+</footer>
+<div class="fixed-btn">
+    <a class="go-top" href="javascript:void(0)" title="返回顶部" style="display: inline-block;"> <span
+            class="glyphicon glyphicon-menu-up"></span></a>
+</div>
+</body>
+</html>

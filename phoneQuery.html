@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>手机号码归属地查询</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no"/>
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <style>
+        .content{
+            padding:15px;
+            text-align: center;
+        }
+    </style>
+    <script>
+        function getShortUrl(){
+            var tel = $("#tel").val();
+            if(tel==''){
+                alert('请输入手机号！');
+                return false;
+            }
+            var data = {tel:tel,apikey:'59cd8be8de571e60594f84872a6fd484'};
+            $.ajax({
+                url:'http://apis.baidu.com/apistore/mobilephoneservice/mobilephone',
+                type:'get',
+                data:data,
+                dataType:'json',
+                beforeSend: function(request) {
+                    request.setRequestHeader("apikey", "59cd8be8de571e60594f84872a6fd484");
+                },
+                success:function(data){
+//                    alert("success"+JSON.stringify(data));
+                    if(data.errMsg=='success'){
+                        var carrier = data.retData.carrier;
+                        $("#carrier").text(carrier);
+                    }else{
+                        alert(JSON.stringify(data));
+                    }
+                },
+                error:function(e){
+                    alert('Fail'+JSON.stringify(e));
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+<div class="content">
+    请输入需要查询的手机号：<input type="text" id="tel" placeholder="请输入手机号"/><input type="button" onclick="getShortUrl()" value="查询"/>
+    <br/><br/>
+    归属地：<span id="carrier"></span>
+</div>
+
+</body>
+</html>

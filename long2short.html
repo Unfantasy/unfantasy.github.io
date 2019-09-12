@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>短网址生成</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no"/>
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <style>
+        .content{
+            padding:15px;
+            text-align: center;
+        }
+    </style>
+    <script>
+        function getShortUrl(){
+            var url_long = $("#longUrl").val();
+            if(url_long==''){
+                alert('请输入长链接！');
+                return false;
+            }
+            var data = {url_long:url_long,apikey:'59cd8be8de571e60594f84872a6fd484'};
+            $.ajax({
+                url:'http://apis.baidu.com/3023/shorturl/shorten',
+                type:'get',
+                data:data,
+                dataType:'json',
+                beforeSend: function(request) {
+                    request.setRequestHeader("apikey", "59cd8be8de571e60594f84872a6fd484");
+                },
+                success:function(data){
+//                    alert("success"+JSON.stringify(data));
+                    if(data.urls){
+                        var shortUrl = data.urls[0].url_short
+$("#shortUrl").val(shortUrl);
+                    }else{
+                        alert(JSON.strinify(data));
+                    }
+                },
+                error:function(e){
+                    alert('Fail'+JSON.strinify(e));
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+<div class="content">
+    请输入长链接：<input type="text" id="longUrl" placeholder="请输入长链接"/><input type="button" onclick="getShortUrl()" value="转换"/>
+    <br/><br/>
+    短链接：<span style="visibility: hidden">请输入</span><input type="text" id="shortUrl"/>
+</div>
+
+</body>
+</html>

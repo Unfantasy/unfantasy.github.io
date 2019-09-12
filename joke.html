@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>开心一笑</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            background:#eee;
+        }
+        .contentBox{
+            background-color:#fff;
+            max-width:500px;
+            margin:0 auto;
+            padding:1px 15px 50px;
+        }
+
+        h3{
+            text-align: center;
+        }
+    </style>
+    <script>
+        function getContents(page){
+            if(isNaN(page)) page=1;
+            var datas = {page:''+page,apikey:'59cd8be8de571e60594f84872a6fd484'};
+            var divs = [];
+            $.ajax({
+                url:'http://apis.baidu.com/showapi_open_bus/showapi_joke/joke_text',
+                type:'get',
+                data:datas,
+                async: false,
+                dataType:'json',
+                beforeSend: function(request) {
+                    request.setRequestHeader("apikey", "59cd8be8de571e60594f84872a6fd484");
+                },
+                success:function(data){
+//                    alert("success"+JSON.stringify(data));
+                    if(data.showapi_res_code==0){
+                        var jokes = data.showapi_res_body.contentlist;
+                        var jokeLength = jokes.length;
+
+                        for(var i=0;i<jokeLength;i++){
+                            var h3 = document.createElement("h3");
+                            var p = document.createElement("p");
+                            var div = document.createElement("div");
+                            div.className='content';
+                            h3.innerHTML = jokes[i].title;
+                            p.innerHTML = jokes[i].text;
+                            div.appendChild(h3);
+                            div.appendChild(p);
+                            var oldhtml = div.innerHTML;
+                            div.innerHTML = oldhtml + '<br/>';
+                            divs.push(div);
+//                            $('.content').append(h3);
+//                            $('.content').append(p);
+//                            $('.content').append('<br/>');
+                        }
+                    }
+                },
+                error:function(e){
+                    alert('Fail'+JSON.strinify(e));
+                }
+            });
+            return divs;
+        }
+        function getJokes(){
+            var random = Math.ceil(Math.random()*1447+1);
+            var jokes = getContents(random);
+            $('article').html('');
+            for(var i=0;i<jokes.length;i++){
+                $('article').append(jokes[i]);
+            }
+            document.body.scrollTop = 0;
+        }
+        $(function(){
+            getJokes();
+        });
+    </script>
+</head>
+<body>
+<div class="contentBox">
+    <article>
+    </article>
+    <div class="text-center">
+        <div class="btn btn-primary btn_joke" onclick="getJokes()">看完了？ 换一批</div>
+    </div>
+</div>
+
+</body>
+</html>

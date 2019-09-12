@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>实用小工具</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+    .navbar, .content {
+      position: relative;
+      padding: 40px;
+    }
+
+    .navbar-nav {
+      position: relative;
+      font-size: 18px;
+      margin: 0 0 15px;
+      border-bottom: 1px solid #dedede;
+      padding-bottom: 8px;
+      padding-left: 8px;
+      line-height: 1.1;
+    }
+
+    .navbar-nav:before {
+      content: ' ';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 18px;
+      background-color: #359bff;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar ul li {
+      float: left;
+      color: #fff;
+      background-color: #359bff;
+      border-radius: 3px;
+      padding: 2px 12px;
+      margin: 0.5em 1em 0.5em 0;
+      cursor: pointer;
+    }
+
+    .content iframe {
+      width: 100%;
+      min-height: 80vh;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="navbar-nav">实用小工具</div>
+    <ul class="J_navbar_list">
+      <li data-url="myweather.html">天气预报</li>
+      <li data-url="joke.html">开心一笑</li>
+      <li data-url="long2short.html">短网址生成</a></li>
+      <li data-url="phoneQuery.html">手机号归属地查询</li>
+    </ul>
+  </div>
+  <div class="content">
+    <iframe class="J_iframe" id="iframepage" src="" frameborder="0"></iframe>
+  </div>
+  <script src="https://cdn.bootcss.com/zepto/1.0rc1/zepto.min.js"></script>
+  <script>
+    $('.J_navbar_list li').click(function() {
+      var starUrl = $(this).attr('data-url')!=null ? $(this).attr('data-url') : 'http://jiangkuanping.com/404.html';
+//       debugger;
+      $('.J_iframe').attr('src', starUrl);
+    });
+  </script>
+</body>
+</html>

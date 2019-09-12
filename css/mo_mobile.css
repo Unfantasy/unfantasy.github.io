@@ -1,0 +1,83 @@
+.content{
+    width:90%;
+}
+.wtime {
+    font-size: .3rem;
+}
+.navbar-toggle{
+    font-size: .5rem;
+}
+.navbar-nav{
+    width: 100%;
+}
+
+.navbar-collapse{
+    width: 100%;
+}
+.nav>li>a{
+    line-height: 2;
+    font-size: .4rem;
+}
+h2{
+    font-size: .67rem;
+}
+h4{
+    font-size: .4rem;
+}
+.poem h3{
+    font-size: .47rem;
+}
+.content p{
+    font-size: .37rem;
+}
+li{
+    font-size: .37rem;
+    text-align: left;
+}
+.qw_content h4{
+    padding:.213rem .13rem;
+}
+
+pre{
+    font-size: .33rem;
+    padding:.13rem;
+}
+ol, ul {
+    padding-left: .53rem;
+}
+footer p{
+    font-size: .33rem;
+}
+.intro_content>table td:nth-child(1){
+    min-width: 6em;
+    font-size: .4rem;
+}
+.intro_content .in_table td, .intro_content .in_table td:nth-child(1){
+    font-size: .267rem;
+}
+.title_content h3 {
+    font-size: .53rem;
+}
+.title_content{
+    width: 80%;
+}
+.title_content p{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+.jd_intro .title_img{
+    width:1.33rem;
+    height:1.33rem;
+}
+.intro_content li,.intro_content p,.intro_content td:nth-child(2){
+    font-size: .26rem;
+}
+.intro_content ul,.intro_content p{
+    margin-bottom:0;
+}
+.td_padding{
+    padding: .3rem 0;
+}

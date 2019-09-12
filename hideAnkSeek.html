@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html ng-app="HideAnkSeek">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>抓不着</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        span{
+            border:1px solid #f45531;
+            padding:3px 5px;
+            position:absolute;
+            top:50%;
+            left:50%;
+            -webkit-transform: translate(-50%,-50%);
+            -moz-transform: translate(-50%,-50%);
+            -ms-transform: translate(-50%,-50%);
+            -o-transform: translate(-50%,-50%);
+            transform: translate(-50%,-50%);
+        }
+    </style>
+</head>
+<body>
+<span wildcat>随意哥哥，你能点到我吗？</span>
+<script src="js/angular.js"></script>
+<script>
+    var width = document.documentElement.clientWidth;
+    var height = document.documentElement.clientHeight;
+    angular.module('HideAnkSeek',[]).directive('wildcat',function($document){
+        var maxLeft = width-50,maxTop= height-50;
+        var msg = ['我闪~~','抓我呀~~~~~~~~','雅蠛蝶~~~~','哦也','你真逊','就差那么一点点了','努力一下也许就抓到了呢','啦啦啦啦','大笨蛋,抓不着'];
+        return function(scope,element,attr){
+//            element.css({'position':'absolute','top':'50%','left':'50%'});
+            element.bind('mouseenter',function(){
+                element.css({'left':parseInt(Math.random()*10000%maxLeft)+'px','top':parseInt(Math.random()*10000%maxTop)+'px'}).text(msg[parseInt(Math.random()*10000%msg.length)]);
+            }).bind('click',function(){
+                element.text('好吧，终于被你抓到了。。。。').css({'color':'#f45531'});
+                element.unbind('mouseenter');
+            });
+        }
+    });
+</script>
+</body>
+</html>

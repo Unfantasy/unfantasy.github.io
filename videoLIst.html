@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>直播视频列表</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <style>
+        .list-block{
+            margin:0;
+        }
+    </style>
+</head>
+<body>
+<div class="page-group" id="app">
+    <div class="page">
+        <!-- 你的html代码 -->
+        <div class="list-block content">
+
+            <div class="content-block-title">视频列表</div>
+            <ul class="listUl">
+                <a :href="src.aSrc" external v-for="src in srcs">
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">{{src.name}}</div>
+                        </div>
+                    </li>
+                </a>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script type='text/javascript' src='http://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script src="js/vue.js"></script>
+<script src="js/public.js"></script>
+<script>
+        var DOMAIN = 'http://www.jiangkuanping.com/video.html';
+//    var DOMAIN = 'video.html';//test
+    if(Vue){
+        new Vue({
+            el:'#app',
+            data:{
+                srcs:[]
+            },
+            created:function(){
+                var _this = this;
+                $.get('data/jingwaiTV70.txt',function(data){
+                    var vedioSrcList = data.split('\n');
+                    var vedioSrcs = [];
+                    for(let i=0;i<vedioSrcList.length;i++){
+                        if(vedioSrcList[i]=='')
+                            vedioSrcList.splice(i,1);
+                        let j = vedioSrcList[i].split(',');
+                        let k = new Object();
+                        k[j[0]]=j[1];
+                        if(j[0]!=''){
+                            let aSrc = DOMAIN+'?videoName='+j[0]+'&vedioSrc='+j[1];
+                            //添加内容
+                            _this.srcs.push({aSrc:aSrc,name:j[0]});
+                        }
+                    }
+                    $.init();
+                });
+            }
+        });
+    }
+
+/*    function getVedioData(){
+        $.get('data/jingwaiTV70.txt',function(data){
+            var vedioSrcList = data.split('\n');
+            var vedioSrcs = [];
+            for(let i=0;i<vedioSrcList.length;i++){
+                if(vedioSrcList[i]=='')
+                    vedioSrcList.splice(i,1);
+                let j = vedioSrcList[i].split(',');
+                let k = new Object();
+                k[j[0]]=j[1];
+                if(j[0]!=''){
+                    //添加内容
+                    let aSrc = DOMAIN+'?videoName='+j[0]+'&vedioSrc='+j[1];
+                    let itemHtml = '<a href="'+aSrc+'" external><li class="item-content"><div class="item-inner"><div class="item-title">'+j[0]+'</div></div></li></a>';
+                    $('.listUl').append(itemHtml);
+                }
+            }
+            $.init();
+            //console.log(vedioSrcs);
+        });
+    }
+    getVedioData();*/
+</script>
+</body>
+
+
+</html>

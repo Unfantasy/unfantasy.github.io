@@ -1,2 +1,1 @@
-# unfantasy.github.io
-大白你好
+# 个人主页静态版

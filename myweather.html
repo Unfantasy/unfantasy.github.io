@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>短网址生成</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no"/>
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <style>
+        .content{
+            padding:15px;
+            text-align: center;
+        }
+    </style>
+    <script>
+        function getWeather(){
+            var city = $("#city").val();
+            if(city==''){
+                alert('请输入城市名！');
+                return false;
+            }
+            var data = {city:city,apikey:'59cd8be8de571e60594f84872a6fd484'};
+            $.ajax({
+                url:'http://apis.baidu.com/heweather/weather/free',
+                type:'get',
+                data:data,
+                dataType:'json',
+                beforeSend: function(request) {
+                    request.setRequestHeader("apikey", "59cd8be8de571e60594f84872a6fd484");
+                },
+                success:function(data){
+//                    alert("success"+JSON.stringify(data));
+                    if(data.urls){
+                        var shortUrl = data.urls[0].url_short
+                        $("#shortUrl").val(shortUrl);
+                    }else{
+                        alert(JSON.stringify(data));
+                        console.log(JSON.stringify(data));
+                    }
+                },
+                error:function(e){
+                    alert('Fail'+JSON.stringify(e));
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+<div class="content">
+    请输入想要查询的城市：<input type="text" id="city" placeholder="国内城市支持中英文，国际城市支持英文"/><input type="button" onclick="getWeather()" value="查询"/>
+    <br/><br/>
+
+</div>
+
+</body>
+</html>
