@@ -1,1 +1,0 @@
-(self["webpackChunk"]=self["webpackChunk"]||[]).push([[866],{6673:function(e){e.exports={title:"title___2cyli"}},6076:function(e,n,t){"use strict";t.r(n),t.d(n,{default:function(){return l}});var i=t(6673),c=t.n(i),u=t(5893);function l(){return(0,u.jsx)("div",{children:(0,u.jsx)("h1",{className:c().title,children:"Page index"})})}}}]);
