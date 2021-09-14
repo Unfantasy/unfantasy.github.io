@@ -3,6 +3,8 @@ import define from './define';
 import routes from './routes';
 
 export default defineConfig({
+  publicPath: './',
+  outputPath: 'site',
   nodeModulesTransform: {
     type: 'none',
   },
