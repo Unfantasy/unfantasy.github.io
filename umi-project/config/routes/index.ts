@@ -11,6 +11,11 @@ const routes: IRoute[] = [
         path: '/zero-width-text',
         component: './zero-width-text',
       },
+      {
+        title: '隐藏的秘密',
+        path: '/zero-width-text/secret',
+        component: './zero-width-text/Secret',
+      },
     ],
   },
 ];
