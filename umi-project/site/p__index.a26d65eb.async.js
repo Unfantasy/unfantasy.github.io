@@ -1,0 +1,1 @@
+(self["webpackChunk"]=self["webpackChunk"]||[]).push([[866],{46076:function(e,n,r){"use strict";r.r(n),r.d(n,{default:function(){return i}});var t=r(73727),u=r(85893);function i(e){var n=e.routes;return(0,u.jsx)("div",{children:(0,u.jsx)("ul",{children:n.map((e=>(0,u.jsx)("li",{children:(0,u.jsx)(t.rU,{to:e.path,children:e.title})})))})})}}}]);
