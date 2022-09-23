@@ -1,12 +1,19 @@
 import { Link } from 'react-router-dom';
 import styles from './index.less';
 
-export default function IndexPage() {
+export default function IndexPage(props: any) {
+  const { routes } = props;
   return (
     <div>
-      <p>
-        1. <Link to="/zero-width-text">零宽字符</Link>
-      </p>
+      <ul>
+        {routes.map((route: any) => {
+          return (
+            <li>
+              <Link to={route.path}>{route.title}</Link>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
