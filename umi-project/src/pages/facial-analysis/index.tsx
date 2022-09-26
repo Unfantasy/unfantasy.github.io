@@ -1,12 +1,18 @@
-import { useEffect, useState } from 'react';
+import { Button, Space } from 'antd';
+import { useEffect, useRef, useState } from 'react';
 import adapter from 'webrtc-adapter';
+import styles from './style.less';
+
 export default function FacialAnalysis() {
   const [stream, setStream] = useState(null);
-  const [video, setVideo] = useState(null);
+  const video = useRef(null);
+  const canvas = useRef(null);
   const handleSuccess = (stream: any) => {
     setStream(stream); // 获取视频流
-
-    // video.srcObject = stream; // 传给 video
+    console.log(video, stream);
+    if (video.current) {
+      video.current.srcObject = stream; // 传给 video
+    }
   };
 
   const handleError = (error: any) => {
@@ -25,10 +31,35 @@ export default function FacialAnalysis() {
   };
 
   useEffect(() => {
-    startMedia();
+    // startMedia();
   }, []);
 
-  console.log('xxx', adapter.browserDetails.browser);
+  const takeSnapshot = () => {
+    if (canvas.current && video.current) {
+      canvas.current
+        .getContext('2d')
+        .drawImage(
+          video.current,
+          0,
+          0,
+          canvas.current.width,
+          canvas.current.height,
+        );
+    }
+  };
 
-  return <div>123</div>;
+  return (
+    <div>
+      <video className={styles.video} ref={video} autoPlay playsInline>
+        视频在这里
+      </video>
+      <Space>
+        <Button onClick={startMedia}>开启摄像头</Button>
+        <Button type="primary" onClick={takeSnapshot}>
+          绘图
+        </Button>
+      </Space>
+      <canvas className={styles.canvas} ref={canvas} />
+    </div>
+  );
 }
