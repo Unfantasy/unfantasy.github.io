@@ -47,6 +47,8 @@ export default function FacialAnalysis() {
         );
     }
   };
+  // TODO: 需要引用 adapter 勿删
+  console.log('xxx', adapter.browserDetails.browser);
 
   return (
     <div>
