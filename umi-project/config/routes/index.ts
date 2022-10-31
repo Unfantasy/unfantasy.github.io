@@ -22,6 +22,11 @@ const routes: IRoute[] = [
     path: '/img-compression',
     component: './img-compression',
   },
+  {
+    title: '笑笑',
+    path: '/sweetie',
+    component: './sweetie',
+  },
 ];
 
 export default routes;

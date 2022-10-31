@@ -1,17 +1,29 @@
 import { Button, Space } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import adapter from 'webrtc-adapter';
+// import { FaceExtractor } from '../../utils/FaceExtractor';
+import faceapi from 'face-api.js';
 import styles from './style.less';
 
 export default function FacialAnalysis() {
   const [stream, setStream] = useState(null);
   const video = useRef(null);
   const canvas = useRef(null);
-  const handleSuccess = (stream: any) => {
+  // const faceExtractor = useRef(new FaceExtractor());
+  // useEffect(() => {
+  //   faceExtractor.current.load();
+  // }, []);
+  const handleSuccess = async (stream: any) => {
     setStream(stream); // 获取视频流
     console.log(video, stream);
     if (video.current) {
       video.current.srcObject = stream; // 传给 video
+
+      const detectionWithExpressions = await faceapi
+        .detectSingleFace(video.current)
+        .withFaceLandmarks()
+        .withFaceExpressions();
+      console.log('detectionWithExpressions: ', detectionWithExpressions);
     }
   };
 

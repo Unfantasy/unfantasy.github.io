@@ -23,6 +23,7 @@
     "@ant-design/pro-layout": "^6.5.0",
     "antd": "^4.16.13",
     "compressorjs": "^1.1.1",
+    "face-api.js": "^0.22.2",
     "react": "17.x",
     "react-dom": "17.x",
     "svgo": "^2.8.0",
