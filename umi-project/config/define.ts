@@ -12,8 +12,4 @@ const suffixSaas = !isProduction ? `${process.env.REACT_APP_ENV}` : ''; // è¯·æ±
 export default {
   'process.env.REACT_APP_ENV': process.env.REACT_APP_ENV,
   'process.env.UMI_ENV': process.env.UMI_ENV,
-  'process.env.REACT_APP_BASEURL': `https://saas${suffixSaas}.myweimai.com`,
-  'process.env.DOC_BASEURL': !isProduction
-    ? `https://${process.env.REACT_APP_ENV}-doc.myweimai.com`
-    : 'https://doctor.myweimai.com/',
 };
